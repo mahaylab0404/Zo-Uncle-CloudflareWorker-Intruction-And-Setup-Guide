@@ -1,0 +1,50 @@
+{
+  "_comment": "This is the tool definition you paste into the ElevenLabs dashboard under your agent's Tools section. Replace the URL with your actual deployed Worker URL.",
+
+  "type": "webhook",
+  "name": "send_notification",
+  "description": "Send a notification email and text message to the phone owner with the caller's information, reason for calling, urgency level, and callback preferences. Call this tool at the END of every conversation after you have collected all available information from the caller.",
+  "api_schema": {
+    "url": "https://voicemail-notification-worker.YOUR-SUBDOMAIN.workers.dev/send-notification",
+    "method": "POST",
+    "request_body_schema": {
+      "type": "object",
+      "properties": {
+        "caller_name": {
+          "type": "string",
+          "description": "The caller's full name. Use 'Unknown' if they declined to share."
+        },
+        "caller_phone": {
+          "type": "string",
+          "description": "The caller's phone number for callback purposes."
+        },
+        "reason": {
+          "type": "string",
+          "description": "A detailed summary of why they are calling. Include as much context and detail as possible — the recipient likes thorough information."
+        },
+        "urgency": {
+          "type": "string",
+          "enum": ["high", "medium", "low"],
+          "description": "How urgent the call is. High: time-sensitive, safety concern, or deadline-driven. Medium: needs attention within a day or two. Low: general inquiry, can wait."
+        },
+        "wants_callback": {
+          "type": "boolean",
+          "description": "Whether the caller would like to receive a callback."
+        },
+        "preferred_callback_day": {
+          "type": "string",
+          "description": "The day the caller prefers for a callback (e.g., 'Monday', 'tomorrow', 'this week'). Only provided if wants_callback is true."
+        },
+        "preferred_callback_time": {
+          "type": "string",
+          "description": "The time of day the caller prefers (e.g., 'morning', 'after 2pm', 'anytime before 5'). Only if wants_callback is true. Note: no callbacks should be after 5pm Eastern."
+        },
+        "additional_notes": {
+          "type": "string",
+          "description": "Any other relevant details, context, or information from the conversation that would be helpful to know."
+        }
+      },
+      "required": ["caller_name", "caller_phone", "reason", "urgency", "wants_callback"]
+    }
+  }
+}

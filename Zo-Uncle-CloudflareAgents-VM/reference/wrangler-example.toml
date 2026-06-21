@@ -1,0 +1,68 @@
+# ============================================================
+# WRANGLER CONFIGURATION — ANNOTATED EXAMPLE
+# ============================================================
+# This file tells Cloudflare about your Worker:
+# - What it's called
+# - Where your code is
+# - What environment variables it needs
+# ============================================================
+
+# The name of your Worker (becomes part of the URL)
+# URL will be: https://<name>.<your-subdomain>.workers.dev
+name = "voicemail-notification-worker"
+
+# Path to your main code file
+main = "worker.js"
+
+# Compatibility date — tells Cloudflare which version of the Workers
+# runtime to use. Just set this to a recent date.
+compatibility_date = "2025-01-01"
+
+# Your Cloudflare account ID — find this in your Cloudflare dashboard
+# (Workers & Pages → Overview → right sidebar → Account ID)
+# account_id = "YOUR_ACCOUNT_ID_HERE"
+
+# ============================================================
+# ENVIRONMENT VARIABLES (non-sensitive values)
+# ============================================================
+# These are available in your Worker as env.VARIABLE_NAME
+# They're visible in your config file, so nothing secret here.
+
+[vars]
+# The email address to send notifications to (uncle's email)
+NOTIFICATION_EMAIL = "uncle@example.com"
+
+# The phone number to send SMS to (uncle's phone, E.164 format)
+NOTIFICATION_PHONE = "+1XXXXXXXXXX"
+
+# The "from" address for emails
+# Use "onboarding@resend.dev" for testing (no domain verification needed)
+# Or verify your own domain in Resend for a custom sender
+FROM_EMAIL = "Voicemail Assistant <onboarding@resend.dev>"
+
+# ============================================================
+# SECRETS (sensitive values — set via CLI, never in this file!)
+# ============================================================
+# Run these commands to add secrets:
+#
+#   npx wrangler secret put RESEND_API_KEY
+#   npx wrangler secret put TWILIO_ACCOUNT_SID
+#   npx wrangler secret put TWILIO_AUTH_TOKEN
+#   npx wrangler secret put TWILIO_PHONE_NUMBER
+#
+# Each command prompts you to paste the value.
+# Secrets are encrypted and never exposed in logs or config.
+# ============================================================
+
+# ============================================================
+# OBSERVABILITY (optional — logging)
+# ============================================================
+# Enable this if you want to see logs in the Cloudflare dashboard
+# or via `wrangler tail`
+
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
+invocation_logs = true
